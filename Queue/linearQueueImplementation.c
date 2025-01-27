@@ -35,7 +35,7 @@ void resizeQueue(Queue* q) {
         return;
     }
     for (int i = 0; i < q->count; i++) {
-        newArray[i] = q->dataArray[(q->front + i) % q->queueSize];
+        newArray[i] = q->dataArray[i];
     }
 
     free(q->dataArray);
