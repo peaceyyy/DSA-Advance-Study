@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure for a doubly linked list node
 typedef struct node {
     int data;
     struct node* next;
     struct node* prev;
 } node_t;
 
-// Function prototypes
-node_t* insertionSortLL(node_t* head); // Your sorting function
+node_t* insertionSortLL(node_t* head); 
 node_t* createNode(int data);
 node_t* insertAtEnd(node_t* head, int data);
 void printList(node_t* head);
 void freeList(node_t* head);
 
-node_t* createNode(int data) {
+node_t* createNode(int data) 
+{
     node_t* newNode = (node_t*)malloc(sizeof(node_t));
     if (!newNode) {
         fprintf(stderr, "Memory allocation failed\n");
@@ -27,8 +26,10 @@ node_t* createNode(int data) {
 }
 
 // Insert node at end of the list
-node_t* insertAtEnd(node_t* head, int data) {
+node_t* insertAtEnd(node_t* head, int data) 
+{
     node_t* newNode = createNode(data);
+    
     if (head == NULL) return newNode;
 
     node_t* temp = head;
@@ -38,7 +39,8 @@ node_t* insertAtEnd(node_t* head, int data) {
 }
 
 // Print linked list
-void printList(node_t* head) {
+void printList(node_t* head) 
+{
     node_t* temp = head;
     while (temp) {
         printf("%d -> ", temp->data);
@@ -48,7 +50,8 @@ void printList(node_t* head) {
 }
 
 // Free linked list memory
-void freeList(node_t* head) {
+void freeList(node_t* head) 
+{
     node_t* temp;
     while (head) {
         temp = head;
@@ -57,47 +60,57 @@ void freeList(node_t* head) {
     }
 }
 
-node_t* insertionSortLL(node_t* head) {
-    if (head == NULL || head->next == NULL) {
-        return head; // Already sorted if empty or has only one node
+node_t* insertionSortLL(node_t* head) 
+{
+    if (head == NULL || head->next == NULL) 
+    {
+        return head; 
     }
 
     node_t* sorted = NULL; // New sorted list
     node_t* curr = head;
 
-    while (curr != NULL) {
-        node_t* next = curr->next; // Store next node before detaching
+    while (curr != NULL) 
+    {
+        node_t* nextNode = curr->next; // Store next node before detaching
 
         // Insert curr into sorted list
-        if (sorted == NULL || curr->data <= sorted->data) {
+        if (sorted == NULL || curr->data >= sorted->data) 
+        {
+            
             // Insert at head of sorted list
             curr->next = sorted;
-            if (sorted != NULL) {
+            if (sorted != NULL) 
+            {
                 sorted->prev = curr;
             }
             sorted = curr;
             sorted->prev = NULL;
-        } else {
+        } else 
+        {
             // Find insertion point
             node_t* trav = sorted;
-            while (trav->next != NULL && trav->next->data < curr->data) {
+            while (trav->next != NULL && trav->next->data > curr->data) 
+            {
                 trav = trav->next;
             }
 
             // Insert curr after trav
             curr->next = trav->next;
-            if (trav->next != NULL) {
+            if (trav->next != NULL) 
+            {
                 trav->next->prev = curr;
             }
             trav->next = curr;
             curr->prev = trav;
         }
 
-        curr = next; // Move to next node in original list
+        curr = nextNode; // Move to next node in original list
     }
 
     return sorted;
 }
+
 void testSelectionSortLinkedList() {
     // Creating an unsorted linked list: 4 -> 2 -> 1 -> 5 -> 3
     node_t* head = NULL;
@@ -118,8 +131,6 @@ void testSelectionSortLinkedList() {
     
     freeList(head);
 }
-
-
 
 
 // Main function to run the test
