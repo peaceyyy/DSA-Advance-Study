@@ -57,34 +57,47 @@ void freeList(node_t* head) {
     }
 }
 
-node_t* insertionSortLL (node_t* head)
-{
-
-    if (head == NULL)
-    {
-        fprintf(stderr, "List is empty");
-        return NULL;
+node_t* insertionSortLL(node_t* head) {
+    if (head == NULL || head->next == NULL) {
+        return head; // Already sorted if empty or has only one node
     }
-    
-    node_t* trav = NULL;
-    
-    for (node_t* curr = head -> next; curr != NULL; curr = curr -> next)
-    {
-        int key = curr -> data;
-        trav = curr -> prev;
-        
-        while (trav != NULL && key < (trav -> data))
-        {
-            trav -> next -> data = trav -> data;
-            trav = trav -> prev;
+
+    node_t* sorted = NULL; // New sorted list
+    node_t* curr = head;
+
+    while (curr != NULL) {
+        node_t* next = curr->next; // Store next node before detaching
+
+        // Insert curr into sorted list
+        if (sorted == NULL || curr->data <= sorted->data) {
+            // Insert at head of sorted list
+            curr->next = sorted;
+            if (sorted != NULL) {
+                sorted->prev = curr;
+            }
+            sorted = curr;
+            sorted->prev = NULL;
+        } else {
+            // Find insertion point
+            node_t* trav = sorted;
+            while (trav->next != NULL && trav->next->data < curr->data) {
+                trav = trav->next;
+            }
+
+            // Insert curr after trav
+            curr->next = trav->next;
+            if (trav->next != NULL) {
+                trav->next->prev = curr;
+            }
+            trav->next = curr;
+            curr->prev = trav;
         }
-        
-        trav -> next -> data = key;
-    }
-    
-    return head;
-}
 
+        curr = next; // Move to next node in original list
+    }
+
+    return sorted;
+}
 void testSelectionSortLinkedList() {
     // Creating an unsorted linked list: 4 -> 2 -> 1 -> 5 -> 3
     node_t* head = NULL;
