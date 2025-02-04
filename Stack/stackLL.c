@@ -110,3 +110,41 @@ int stackCount (node_t* stackTop)
     return nodeCount;
     
 }
+
+int main() {
+    printf("Testing Stack Implementation (Linked List)...\n");
+
+    // Pushing elements onto the stack
+    push(10);
+    push(20);
+    push(30);
+
+    // Display the stack
+    printf("Stack after pushes: ");
+    displayStack(stackTop);
+    printf("\n");
+
+    // Peek at the top element
+    printf("Top element: %d\n", peek(stackTop));
+
+    // Pop an element
+    printf("Popped element: %d\n", pop(stackTop));
+
+    // Display the stack after pop
+    printf("Stack after popping: ");
+    displayStack(stackTop);
+    printf("\n");
+
+    // Count elements in the stack
+    printf("Stack count: %d\n", stackCount(stackTop));
+
+    // Empty the stack
+    while (!isEmpty(stackTop)) {
+        pop(stackTop);
+    }
+
+    // Check if the stack is empty
+    printf("Stack empty? %s\n", isEmpty(stackTop) ? "Yes" : "No");
+
+    return 0;
+}
