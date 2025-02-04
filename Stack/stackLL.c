@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef Node 
+typedef struct Node 
 {
-    
     int val;
-    struct node_t* next;
+    struct Node* next;
     
 } node_t;
 
@@ -32,6 +31,7 @@ void push (int x)
     if (newNode == NULL)
     {
         fprintf(stderr, "Memory allocation failed.");
+        return;
     }
     
     newNode -> next = stackTop;
@@ -41,9 +41,9 @@ void push (int x)
     
 }
 
-int pop (node_t* stackTop)
+int pop ()
 {
-    if (isEmpty(stackTop)
+    if (isEmpty(stackTop))
     {
         printf("Stack is empty");
         return -1;
@@ -59,9 +59,9 @@ int pop (node_t* stackTop)
 
 }
 
-int peek (node_t* stackTop)
+int peek ()
 {
-    if (isEmpty(stackTop)
+    if (isEmpty(stackTop))
     {
         printf("Stack is empty");
         return -1;
@@ -73,37 +73,38 @@ int peek (node_t* stackTop)
  
 }
 
-void displayStack (node_t* stackTop)
+void displayStack ()
 {
-    if (isEmpty(stackTop)
+    if (isEmpty(stackTop))
     {
         printf("Stack is empty");
-        return -1;
     }
     
     
     node_t* trav = stackTop;
     
-    while (trav -> next != NULL)
+    while (trav != NULL)
     {
-        printf("%d -> ", trav -> val);
+        printf("%d ", trav -> val);
         trav = trav -> next;
     }
     
 }
 
-int stackCount (node_t* stackTop)
+int stackCount ()
 {
-    if (isEmpty(stackTop)
+    if (isEmpty(stackTop))
     {
         printf("Stack is empty");
         return -1;
     }
     
+    node_t* trav = stackTop;
+    
     int nodeCount = 0;
     while (trav -> next != NULL)
     {
-        count++;
+        nodeCount++;
         trav = trav -> next;
     }
     
