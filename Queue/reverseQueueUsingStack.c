@@ -104,27 +104,36 @@ void push(StackNode** top, int val){
     if (*top == NULL) 
     {
         *top = newNode;
+        return;
     }
     
     newNode -> next = *top;
-    
-    
-    
-    
-
-    
-    
-    
+    *top = newNode;
     
 }
 
 
-int pop(StackNode** top);
+int pop(StackNode** top)
+{
+    StackNode* temp = *top;
+    int val = (*top) -> data;
+    
+    *top = *top -> next;
+    
+    free(temp);
+    
+    return val;
+    
+}
+
 
 // Function to reverse a queue using a stack
-void reverseQueue(Queue* q) {
-    // TODO: Implement the function using a stack
-}
+// void reverseQueue(Queue* q) {
+    
+//     StackNode* stack = createStack();
+        
+    
+// }
 
 int main() {
     Queue* q = createQueue();
