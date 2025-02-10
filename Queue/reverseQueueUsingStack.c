@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Queue structure
+
 typedef struct QueueNode {
     int data;
     struct QueueNode* next;
@@ -12,7 +12,7 @@ typedef struct Queue {
     QueueNode* rear;
 } Queue;
 
-// Stack structure
+
 typedef struct StackNode {
     int data;
     struct StackNode* next;
@@ -40,7 +40,7 @@ void enqueue(Queue* q, int val) {
     newNode->data = val;
     newNode->next = NULL;
 
-    if (q->rear == NULL) {  // If queue is empty
+    if (q->rear == NULL) { 
         q->front = q->rear = newNode;
     } else {
         q->rear->next = newNode;
@@ -49,7 +49,8 @@ void enqueue(Queue* q, int val) {
 }
 
 int dequeue(Queue* q) {
-    if (q->front == NULL) {  // Edge case: empty queue
+    if (q->front == NULL) {  
+        q->rear = NULL;
         fprintf(stderr, "Queue is empty. Cannot dequeue.\n");
         exit(1);
     }
@@ -58,10 +59,6 @@ int dequeue(Queue* q) {
     int val = temp->data;
 
     q->front = q->front->next;
-
-    if (q->front == NULL) {  // If queue becomes empty, update rear
-        q->rear = NULL;
-    }
 
     free(temp);
     return val;
@@ -88,7 +85,7 @@ int isQueueEmpty(Queue* q) {
 // -------------------- STACK FUNCTIONS --------------------
 
 StackNode* createStack() {
-    return NULL;  // Stack starts empty
+    return NULL; 
 }
 
 void push(StackNode** top, int val) {
@@ -99,12 +96,12 @@ void push(StackNode** top, int val) {
     }
 
     newNode->data = val;
-    newNode->next = *top;  // Point new node to old top
-    *top = newNode;        // Update top to new node
+    newNode->next = *top;  
+    *top = newNode;        
 }
 
 int pop(StackNode** top) {
-    if (*top == NULL) {  // Edge case: empty stack
+    if (*top == NULL) {  
         fprintf(stderr, "Stack is empty. Cannot pop.\n");
         exit(1);
     }
@@ -122,23 +119,23 @@ int isStackEmpty(StackNode* top) {
     return top == NULL;
 }
 
-// -------------------- FUNCTION TO REVERSE QUEUE --------------------
+
 
 void reverseQueue(Queue* q) {
     StackNode* stack = createStack();
 
-    // Step 1: Move all elements from queue to stack
+    // Move all elements from queue to stack
     while (!isQueueEmpty(q)) {
         push(&stack, dequeue(q));  // Dequeue from queue, push onto stack
     }
 
-    // Step 2: Move all elements back from stack to queue (this reverses the order)
+    // Move all elements back from stack to queue 
     while (!isStackEmpty(stack)) {
         enqueue(q, pop(&stack));  // Pop from stack, enqueue back to queue
     }
 }
 
-// -------------------- MAIN FUNCTION --------------------
+
 
 int main() {
     Queue* q = createQueue();
