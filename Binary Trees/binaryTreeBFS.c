@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the structure for a tree node
 typedef struct TreeNode
 {
     int data;
@@ -9,21 +8,18 @@ typedef struct TreeNode
     struct TreeNode *right;
 } TreeNode;
 
-// Define the structure for a queue node
 typedef struct QueueNode
 {
     TreeNode *treeNode;
     struct QueueNode *next;
 } QueueNode;
 
-// Define the structure for the queue
 typedef struct Queue
 {
     QueueNode *front;
     QueueNode *rear;
 } Queue;
 
-// Function to create a new tree node
 TreeNode *createTreeNode(int data)
 {
     TreeNode *newNode = (TreeNode *)malloc(sizeof(TreeNode));
@@ -33,7 +29,6 @@ TreeNode *createTreeNode(int data)
     return newNode;
 }
 
-// Function to create a new queue node
 QueueNode *createQueueNode(TreeNode *treeNode)
 {
     QueueNode *newQueueNode = (QueueNode *)malloc(sizeof(QueueNode));
@@ -42,7 +37,6 @@ QueueNode *createQueueNode(TreeNode *treeNode)
     return newQueueNode;
 }
 
-// Function to initialize a queue
 Queue *createQueue()
 {
     Queue *queue = (Queue *)malloc(sizeof(Queue));
@@ -51,13 +45,11 @@ Queue *createQueue()
     return queue;
 }
 
-// Function to check if the queue is empty
 int isQueueEmpty(Queue *queue)
 {
     return queue->front == NULL;
 }
 
-// Function to enqueue a tree node
 void enqueue(Queue *queue, TreeNode *treeNode)
 {
     QueueNode *newQueueNode = createQueueNode(treeNode);
@@ -70,7 +62,6 @@ void enqueue(Queue *queue, TreeNode *treeNode)
     queue->rear = newQueueNode;
 }
 
-// Function to dequeue a tree node
 TreeNode *dequeue(Queue *queue)
 {
     if (isQueueEmpty(queue))
@@ -88,19 +79,46 @@ TreeNode *dequeue(Queue *queue)
     return treeNode;
 }
 
-// Function to perform BFS on the binary tree
+TreeNode *insertNode(TreeNode *root, int val)
+{
+    if (root == NULL)
+    {
+        return createTreeNode(val);
+    }
+    if (val < root->data)
+    {
+        root->left = insertNode(root->left, val);
+    }
+    else
+    {
+        root->right = insertNode(root->right, val);
+    }
+    return root;
+}
+
+void freeQueue(Queue *queue)
+{
+    while (!isQueueEmpty(queue))
+    {
+        dequeue(queue);
+    }
+    free(queue);
+}
+
 void breadthFirstSearch(TreeNode *root)
 {
-
+    if (root == NULL)
+    {
+        fprintf(stderr, "Binary Tree is empty");
+        return;
+    }
     Queue *queue = createQueue();
     enqueue(queue, root);
-    
 
     while (!isQueueEmpty(queue))
     {
-        printf("%d ", curr->data);
         TreeNode *curr = dequeue(queue);
-        
+        printf("%d ", curr->data);
 
         if (curr->left != NULL)
         {
@@ -111,20 +129,28 @@ void breadthFirstSearch(TreeNode *root)
         {
             enqueue(queue, curr->right);
         }
-
-
     }
+
+    freeQueue(queue);
 }
 
-// Main function
 int main()
 {
 
-    TreeNode *root = createTreeNode(1);
-    root->left = createTreeNode(2);
-    root->right = createTreeNode(3);
-    root->left->left = createTreeNode(4);
-    root->left->right = createTreeNode(5);
+    TreeNode *root = NULL;
+
+    root = insertNode(root, 10);
+    insertNode(root, 11);
+    insertNode(root, 13);
+    insertNode(root, 15);
+    insertNode(root, 5);
+    insertNode(root, 15);
+    insertNode(root, 3);
+    insertNode(root, 7);
+    insertNode(root, 12);
+    insertNode(root, 18);
+
+    // Expected output for BFS: 10 5 11 3 7 13 15 12 15 18
 
     printf("Breadth-First Search: ");
     breadthFirstSearch(root);
