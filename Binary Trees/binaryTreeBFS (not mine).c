@@ -15,34 +15,6 @@ TreeNode* new_node(int val) {
     return n;
 }
 
-void print_depth_first(TreeNode* root) {
-    TreeNode* process_stack[100];
-    size_t process_stack_num = 0;
-    process_stack[0] = root;
-    process_stack_num++;
-
-    while (process_stack_num > 0) {
-        TreeNode* current = process_stack[process_stack_num - 1];
-        process_stack_num--;
-
-        if (current->val == 4) {
-            printf("%d(yay we found the node 4) ", current->val);
-            break;
-        } else {
-            printf("%d ", current->val);
-        }
-
-        if (current->right != NULL) {
-            process_stack[process_stack_num] = current->right;
-            process_stack_num++;
-        }
-        if (current->left != NULL) {
-            process_stack[process_stack_num] = current->left;
-            process_stack_num++;
-        }
-    }
-}
-
 void print_breadth_first(TreeNode* root) {
     TreeNode* process_queue[100];
     size_t process_queue_num = 0;
