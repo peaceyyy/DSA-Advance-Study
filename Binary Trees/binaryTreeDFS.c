@@ -24,6 +24,7 @@ Node *createNode(int value)
 
     return newNode;
 }
+
 Node *insert(Node *root, int value)
 {
 
@@ -51,7 +52,6 @@ Node *insert(Node *root, int value)
 }
 
 // Depth-First Traversals
-
 void preorderTraversal(Node *root)
 {
     if (root == NULL)
@@ -90,7 +90,6 @@ void freeTree(Node *root)
 
     freeTree(root->left);
     freeTree(root->right);
-
     free(root);
 }
 
