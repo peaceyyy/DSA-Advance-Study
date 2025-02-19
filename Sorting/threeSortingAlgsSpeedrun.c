@@ -1,18 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//Current record at 5:10
 
 #include <stdio.h>
 
