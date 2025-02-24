@@ -15,9 +15,9 @@ typedef struct
 
 typedef struct
 {
-    int vertices;
+    int numOfVertices;
     List **nodeArr;
-} Graph;
+} AdjList;
 
 node_t *createNode(int val)
 {
@@ -34,11 +34,11 @@ node_t *createNode(int val)
     return newNode;
 }
 
-Graph *initializeAdjList(int v)
+AdjList *initializeAdjList(int v)
 {
-    Graph *g = malloc(sizeof(Graph));
-    g->vertices = v;
-    g->nodeArr = malloc(sizeof(List) * g->vertices);
+    AdjList *g = malloc(sizeof(AdjList));
+    g->numOfVertices = v;
+    g->nodeArr = malloc(sizeof(List) * g->numOfVertices);
 
     for (int i = 0; i < v; i++)
     {
@@ -49,15 +49,15 @@ Graph *initializeAdjList(int v)
     return g;
 }
 
-int checkForEdge(Graph *g, int sourceVertex, int targetVertex)
+int checkForEdge(AdjList *graph, int sourceVertex, int targetVertex)
 {
 
-    if (sourceVertex < 0 || sourceVertex >= g->vertices)
+    if (sourceVertex < 0 || sourceVertex >= graph->numOfVertices)
     {
         return 0;
     }
 
-    node_t *trav = g->nodeArr[sourceVertex]->head;
+    node_t *trav = graph->nodeArr[sourceVertex]->head;
 
     while (trav != NULL)
     {
@@ -70,50 +70,50 @@ int checkForEdge(Graph *g, int sourceVertex, int targetVertex)
 
     return 0;
 }
-void addEdge(Graph *g, int src, int dest, bool isDirected)
+void addEdge(AdjList *graph, int src, int dest, bool isDirected)
 {
-    if (src < 0 || src >= g->vertices || dest < 0 || dest >= g->vertices)
+    if (src < 0 || src >= graph->numOfVertices || dest < 0 || dest >= graph->numOfVertices)
     {
         printf("Source (%d) or Destination (%d) out of bounds!\n", src, dest);
         return;
     }
 
-    if (checkForEdge(g, src, dest))
+    if (checkForEdge(graph, src, dest))
     {
         printf("%d and %d are already connected\n", src, dest);
         return;
     }
 
     node_t *temp = createNode(dest);
-    temp->next = g->nodeArr[src]->head;
-    g->nodeArr[src]->head = temp;
+    temp->next = graph->nodeArr[src]->head;
+    graph->nodeArr[src]->head = temp;
 
     if (!isDirected)
     {
         node_t *temp2 = createNode(src);
-        temp2->next = g->nodeArr[dest]->head;
-        g->nodeArr[dest]->head = temp2;
+        temp2->next = graph->nodeArr[dest]->head;
+        graph->nodeArr[dest]->head = temp2;
     }
 }
 
-void removeEdge(Graph *g, int src, int dest, bool isDirected)
+void removeEdge(AdjList *graph, int src, int dest, bool isDirected)
 {
     
-    if (src < 0 || src >= g->vertices || dest < 0 || dest >= g->vertices)
+    if (src < 0 || src >= graph->numOfVertices || dest < 0 || dest >= graph->numOfVertices)
     {
         printf("Source (%d) or Destination (%d) out of bounds!\n", src, dest);
         return;
     }
 
     
-    if (!checkForEdge(g, src, dest))
+    if (!checkForEdge(graph, src, dest))
     {
-        printf("Vertices are not connected!\n");
+        printf("numOfVertices are not connected!\n");
         return;
     }
 
     
-    node_t *trav1 = g->nodeArr[src]->head;
+    node_t *trav1 = graph->nodeArr[src]->head;
     while (trav1 != NULL)
     {
         if (trav1->val == dest)
@@ -129,7 +129,7 @@ void removeEdge(Graph *g, int src, int dest, bool isDirected)
     
     if (!isDirected)
     {
-        node_t *trav2 = g->nodeArr[dest]->head;
+        node_t *trav2 = graph->nodeArr[dest]->head;
         while (trav2 != NULL)
         {
             if ((trav2)->val == src)
@@ -144,19 +144,19 @@ void removeEdge(Graph *g, int src, int dest, bool isDirected)
     }
 }
 
-void printGraph(Graph *g)
+void printAdjList(AdjList *graph)
 
 {
-    if (g == NULL)
+    if (graph == NULL)
     {
-        printf("Graph ain't here");
+        printf("AdjList ain't here");
         return;
     }
 
-    for (int i = 0; i < g->vertices; i++)
+    for (int i = 0; i < graph->numOfVertices; i++)
     {
         printf("Vertex %d: ", i);
-        node_t *trav = g->nodeArr[i]->head;
+        node_t *trav = graph->nodeArr[i]->head;
         while (trav != NULL)
         {
             printf("%d -> ", trav->val);
@@ -166,27 +166,27 @@ void printGraph(Graph *g)
     }
 }
 
-void freeGraph(Graph *g)
+void freeAdjList(AdjList *graph)
 {
-    if (g == NULL) return; 
+    if (graph == NULL) return; 
 
-    for (int i = 0; i < g->vertices; i++)
+    for (int i = 0; i < graph->numOfVertices; i++)
     {
-        if (g->nodeArr[i] != NULL) 
+        if (graph->nodeArr[i] != NULL) 
         {
-            node_t *trav = g->nodeArr[i]->head;
+            node_t *trav = graph->nodeArr[i]->head;
             while (trav != NULL)
             {
                 node_t *temp = trav;
                 trav = trav->next;
                 free(temp);
             }
-            free(g->nodeArr[i]);  
-            g->nodeArr[i] = NULL; // Prevent dangling pointer
+            free(graph->nodeArr[i]);  
+            graph->nodeArr[i] = NULL; // Prevent dangling pointer
         }
     }
-    free(g->nodeArr); 
-    free(g); 
+    free(graph->nodeArr); 
+    free(graph); 
 
 }
 
@@ -205,9 +205,9 @@ void freeList (List* l)
 
     free(l);
 }
-List *getNodeNeighbors(Graph *g, int node)
+List *getNodeNeighbors(AdjList *graph, int node)
 {
-    if (node < 0 || node >= g->vertices)
+    if (node < 0 || node >= graph->numOfVertices)
     {
         printf("Invalid node index!\n");
         return NULL;
@@ -222,7 +222,7 @@ List *getNodeNeighbors(Graph *g, int node)
 
     neighborsList->head = NULL;
 
-    node_t *trav = g->nodeArr[node]->head;
+    node_t *trav = graph->nodeArr[node]->head;
     while (trav != NULL)
     {
         node_t *newNode = createNode(trav->val);
@@ -236,17 +236,17 @@ List *getNodeNeighbors(Graph *g, int node)
 
 int main()
 {
-    Graph *g = initializeAdjList(4);
+    AdjList *graph = initializeAdjList(4);
 
-    addEdge(g, 0, 3, false);
-    addEdge(g, 2, 1, false);
-    addEdge(g, 1, 2, false);
-    addEdge(g, 0, 2, false);
+    addEdge(graph, 0, 3, false);
+    addEdge(graph, 2, 1, false);
+    addEdge(graph, 1, 2, false);
+    addEdge(graph, 0, 2, false);
 
     /////// Test get Node Neighbors
 
     printf("Neighbors of Node 0 are: ");
-    List *nodeNeighbors = getNodeNeighbors(g, 0);
+    List *nodeNeighbors = getNodeNeighbors(graph, 0);
 
     node_t *trav = nodeNeighbors->head;
     while (trav)
@@ -259,10 +259,10 @@ int main()
     ///////
 
     printf("\n");
-    printGraph(g);
+    printAdjList(graph);
 
     freeList(nodeNeighbors); 
-    freeGraph(g);
+    freeAdjList(graph);
 
     return 0;
 }
